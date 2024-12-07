@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "800079870029",
+    "project_id": "polihackk",
+    "storage_bucket": "polihackk.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:800079870029:android:1d3a83380208c1a026c404",
+        "android_client_info": {
+          "package_name": "com.example.polihack"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdCunDoT0fslQj-2a10OLpK8TKVQur2Ug"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:800079870029:android:cc5211b7d625b64a26c404",
+        "android_client_info": {
+          "package_name": "com.mycompany.travelapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdCunDoT0fslQj-2a10OLpK8TKVQur2Ug"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
