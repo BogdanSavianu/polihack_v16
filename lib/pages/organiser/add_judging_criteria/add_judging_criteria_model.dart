@@ -19,10 +19,19 @@ class AddJudgingCriteriaModel
 
   ///  State fields for stateful widgets in this page.
 
+  final formKey = GlobalKey<FormState>();
   // State field(s) for TextField widget.
   FocusNode? textFieldFocusNode1;
   TextEditingController? textController1;
   String? Function(BuildContext, String?)? textController1Validator;
+  String? _textController1Validator(BuildContext context, String? val) {
+    if (val == null || val.isEmpty) {
+      return 'Field is required';
+    }
+
+    return null;
+  }
+
   // State field(s) for TextField widget.
   FocusNode? textFieldFocusNode2;
   TextEditingController? textController2;
@@ -37,7 +46,9 @@ class AddJudgingCriteriaModel
   String? Function(BuildContext, String?)? textController4Validator;
 
   @override
-  void initState(BuildContext context) {}
+  void initState(BuildContext context) {
+    textController1Validator = _textController1Validator;
+  }
 
   @override
   void dispose() {

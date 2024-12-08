@@ -58,8 +58,8 @@ class _FeedbackPageWidgetState extends State<FeedbackPageWidget> {
               color: FlutterFlowTheme.of(context).info,
               size: 24.0,
             ),
-            onPressed: () {
-              print('IconButton pressed ...');
+            onPressed: () async {
+              context.safePop();
             },
           ),
           title: Text(
@@ -123,7 +123,7 @@ class _FeedbackPageWidgetState extends State<FeedbackPageWidget> {
                                   () => _model.ratingBarValue = newValue),
                               itemBuilder: (context, index) => Icon(
                                 Icons.star_rounded,
-                                color: FlutterFlowTheme.of(context).primary,
+                                color: FlutterFlowTheme.of(context).error,
                               ),
                               direction: Axis.horizontal,
                               initialRating: _model.ratingBarValue ??= 3.0,
@@ -131,7 +131,7 @@ class _FeedbackPageWidgetState extends State<FeedbackPageWidget> {
                                   FlutterFlowTheme.of(context).accent1,
                               itemCount: 5,
                               itemSize: 24.0,
-                              glowColor: FlutterFlowTheme.of(context).primary,
+                              glowColor: FlutterFlowTheme.of(context).error,
                             ),
                           ].divide(const SizedBox(height: 16.0)),
                         ),
@@ -187,7 +187,7 @@ class _FeedbackPageWidgetState extends State<FeedbackPageWidget> {
                                     ),
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: const BorderSide(
-                                    color: Color(0xFFE0E0E0),
+                                    color: Colors.white,
                                     width: 1.0,
                                   ),
                                   borderRadius: BorderRadius.circular(8.0),
@@ -248,7 +248,7 @@ class _FeedbackPageWidgetState extends State<FeedbackPageWidget> {
                                     ),
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: const BorderSide(
-                                    color: Color(0xFFE0E0E0),
+                                    color: Colors.white,
                                     width: 1.0,
                                   ),
                                   borderRadius: BorderRadius.circular(8.0),

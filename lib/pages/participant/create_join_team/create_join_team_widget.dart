@@ -455,6 +455,27 @@ class _CreateJoinTeamWidgetState extends State<CreateJoinTeamWidget> {
                                           },
                                         ),
                                       });
+
+                                      context.pushNamed('pageHomeParticipant');
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            'Team joining failed!',
+                                            style: TextStyle(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primaryText,
+                                            ),
+                                          ),
+                                          duration:
+                                              const Duration(milliseconds: 4000),
+                                          backgroundColor:
+                                              FlutterFlowTheme.of(context)
+                                                  .alternate,
+                                        ),
+                                      );
                                     }
                                   } finally {
                                     await firestoreBatch.commit();
@@ -526,6 +547,69 @@ class _CreateJoinTeamWidgetState extends State<CreateJoinTeamWidget> {
                                               true, // whether to show the flash icon
                                               ScanMode.QR,
                                             );
+
+                                            _model.queryResultQr =
+                                                await queryTeamsRecordCount(
+                                              queryBuilder: (teamsRecord) =>
+                                                  teamsRecord.where(
+                                                'teamCode',
+                                                isEqualTo: _model.scannedQrCode,
+                                              ),
+                                            );
+                                            if (_model.queryResultQr == 1) {
+                                              _model.teamRowQR =
+                                                  await queryTeamsRecordOnce(
+                                                queryBuilder: (teamsRecord) =>
+                                                    teamsRecord.where(
+                                                  'teamCode',
+                                                  isEqualTo:
+                                                      _model.scannedQrCode,
+                                                ),
+                                                singleRecord: true,
+                                              ).then((s) => s.firstOrNull);
+
+                                              await currentUserReference!
+                                                  .update(createUsersRecordData(
+                                                teamId:
+                                                    _model.teamRowQR?.reference,
+                                              ));
+
+                                              await _model.teamRowQR!.reference
+                                                  .update({
+                                                ...mapToFirestore(
+                                                  {
+                                                    'members':
+                                                        FieldValue.arrayUnion([
+                                                      currentUserReference
+                                                    ]),
+                                                  },
+                                                ),
+                                              });
+
+                                              context.pushNamed(
+                                                  'pageHomeParticipant');
+                                            } else {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                  content: Text(
+                                                    'Team not found!',
+                                                    style: TextStyle(
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .primaryText,
+                                                    ),
+                                                  ),
+                                                  duration: const Duration(
+                                                      milliseconds: 4000),
+                                                  backgroundColor:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .alternate,
+                                                ),
+                                              );
+                                            }
 
                                             safeSetState(() {});
                                           },

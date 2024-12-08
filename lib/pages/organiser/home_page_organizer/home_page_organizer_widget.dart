@@ -1,5 +1,6 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
+import '/components/event_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -36,6 +37,8 @@ class _HomePageOrganizerWidgetState extends State<HomePageOrganizerWidget> {
         context.goNamed('MentorCalendar');
       } else if (valueOrDefault(currentUserDocument?.role, '') == 'judge') {
         context.goNamed('Judging');
+      } else if (valueOrDefault(currentUserDocument?.role, '') == 'volunteer') {
+        context.pushNamed('homeVolunteer');
       }
     });
   }
@@ -146,8 +149,7 @@ class _HomePageOrganizerWidgetState extends State<HomePageOrganizerWidget> {
                           child: Container(
                             width: MediaQuery.sizeOf(context).width * 1.0,
                             decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context)
-                                  .primaryBackground,
+                              color: Colors.white,
                               borderRadius: BorderRadius.circular(16.0),
                             ),
                             child: Padding(
@@ -206,7 +208,10 @@ class _HomePageOrganizerWidgetState extends State<HomePageOrganizerWidget> {
                                               int textCount = snapshot.data!;
 
                                               return Text(
-                                                textCount.toString(),
+                                                valueOrDefault<String>(
+                                                  textCount.toString(),
+                                                  '0',
+                                                ),
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .headlineMedium
@@ -267,15 +272,46 @@ class _HomePageOrganizerWidgetState extends State<HomePageOrganizerWidget> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Text(
-                                            '50',
-                                            style: FlutterFlowTheme.of(context)
-                                                .headlineMedium
-                                                .override(
-                                                  fontFamily: 'Outfit',
-                                                  color: const Color(0xFF8D0003),
-                                                  letterSpacing: 0.0,
+                                          FutureBuilder<int>(
+                                            future: queryTeamsRecordCount(),
+                                            builder: (context, snapshot) {
+                                              // Customize what your widget looks like when it's loading.
+                                              if (!snapshot.hasData) {
+                                                return Center(
+                                                  child: SizedBox(
+                                                    width: 50.0,
+                                                    height: 50.0,
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                      valueColor:
+                                                          AlwaysStoppedAnimation<
+                                                              Color>(
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .primary,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                );
+                                              }
+                                              int textCount = snapshot.data!;
+
+                                              return Text(
+                                                valueOrDefault<String>(
+                                                  textCount.toString(),
+                                                  '0',
                                                 ),
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .headlineMedium
+                                                        .override(
+                                                          fontFamily: 'Outfit',
+                                                          color:
+                                                              const Color(0xFF8D0003),
+                                                          letterSpacing: 0.0,
+                                                        ),
+                                              );
+                                            },
                                           ),
                                           Text(
                                             'Teams',
@@ -307,8 +343,7 @@ class _HomePageOrganizerWidgetState extends State<HomePageOrganizerWidget> {
                           child: Container(
                             width: MediaQuery.sizeOf(context).width * 1.0,
                             decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context)
-                                  .primaryBackground,
+                              color: Colors.white,
                               borderRadius: BorderRadius.circular(16.0),
                             ),
                             child: Padding(
@@ -393,7 +428,7 @@ class _HomePageOrganizerWidgetState extends State<HomePageOrganizerWidget> {
                                                   Colors.transparent,
                                               onTap: () async {
                                                 context.pushNamed(
-                                                    'ContestantCalendar');
+                                                    'OrganizerCalendar');
                                               },
                                               child: const Icon(
                                                 Icons.event_note,
@@ -403,7 +438,7 @@ class _HomePageOrganizerWidgetState extends State<HomePageOrganizerWidget> {
                                             ),
                                           ),
                                           Text(
-                                            'Schedule',
+                                            'Calendar',
                                             style: FlutterFlowTheme.of(context)
                                                 .bodySmall
                                                 .override(
@@ -433,7 +468,8 @@ class _HomePageOrganizerWidgetState extends State<HomePageOrganizerWidget> {
                                               highlightColor:
                                                   Colors.transparent,
                                               onTap: () async {
-                                                context.pushNamed('Judging');
+                                                context.pushNamed(
+                                                    'AddJudgingCriteria');
                                               },
                                               child: const Icon(
                                                 Icons.emoji_events,
@@ -521,8 +557,7 @@ class _HomePageOrganizerWidgetState extends State<HomePageOrganizerWidget> {
                           child: Container(
                             width: MediaQuery.sizeOf(context).width * 1.0,
                             decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context)
-                                  .primaryBackground,
+                              color: Colors.white,
                               borderRadius: BorderRadius.circular(16.0),
                             ),
                             child: Padding(
@@ -540,205 +575,57 @@ class _HomePageOrganizerWidgetState extends State<HomePageOrganizerWidget> {
                                           letterSpacing: 0.0,
                                         ),
                                   ),
-                                  Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [
-                                              Container(
-                                                width: 50.0,
-                                                height: 50.0,
-                                                decoration: BoxDecoration(
-                                                  color: const Color(0xFFE3F2FD),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          8.0),
-                                                ),
-                                                child: const Icon(
-                                                  Icons.computer,
-                                                  color: Color(0xFF1565C0),
-                                                  size: 24.0,
-                                                ),
+                                  StreamBuilder<List<CalendarRecord>>(
+                                    stream: queryCalendarRecord(
+                                      queryBuilder: (calendarRecord) =>
+                                          calendarRecord
+                                              .where(
+                                                'start_time',
+                                                isGreaterThan:
+                                                    getCurrentTimestamp,
+                                              )
+                                              .orderBy('start_time'),
+                                      limit: 3,
+                                    ),
+                                    builder: (context, snapshot) {
+                                      // Customize what your widget looks like when it's loading.
+                                      if (!snapshot.hasData) {
+                                        return Center(
+                                          child: SizedBox(
+                                            width: 50.0,
+                                            height: 50.0,
+                                            child: CircularProgressIndicator(
+                                              valueColor:
+                                                  AlwaysStoppedAnimation<Color>(
+                                                FlutterFlowTheme.of(context)
+                                                    .primary,
                                               ),
-                                              Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    'Team Formation',
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyLarge
-                                                        .override(
-                                                          fontFamily:
-                                                              'Readex Pro',
-                                                          letterSpacing: 0.0,
-                                                        ),
-                                                  ),
-                                                  Text(
-                                                    'Today, 2:00 PM',
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodySmall
-                                                        .override(
-                                                          fontFamily:
-                                                              'Readex Pro',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .secondaryText,
-                                                          letterSpacing: 0.0,
-                                                        ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ].divide(const SizedBox(width: 16.0)),
+                                            ),
                                           ),
-                                          Icon(
-                                            Icons.chevron_right,
-                                            color: FlutterFlowTheme.of(context)
-                                                .secondaryText,
-                                            size: 24.0,
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [
-                                              Container(
-                                                width: 50.0,
-                                                height: 50.0,
-                                                decoration: BoxDecoration(
-                                                  color: const Color(0xFFE8F5E9),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          8.0),
-                                                ),
-                                                child: const Icon(
-                                                  Icons.mic,
-                                                  color: Color(0xFF2E7D32),
-                                                  size: 24.0,
-                                                ),
-                                              ),
-                                              Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    'Opening Ceremony',
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyLarge
-                                                        .override(
-                                                          fontFamily:
-                                                              'Readex Pro',
-                                                          letterSpacing: 0.0,
-                                                        ),
-                                                  ),
-                                                  Text(
-                                                    'Today, 4:00 PM',
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodySmall
-                                                        .override(
-                                                          fontFamily:
-                                                              'Readex Pro',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .secondaryText,
-                                                          letterSpacing: 0.0,
-                                                        ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ].divide(const SizedBox(width: 16.0)),
-                                          ),
-                                          Icon(
-                                            Icons.chevron_right,
-                                            color: FlutterFlowTheme.of(context)
-                                                .secondaryText,
-                                            size: 24.0,
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [
-                                              Container(
-                                                width: 50.0,
-                                                height: 50.0,
-                                                decoration: BoxDecoration(
-                                                  color: const Color(0xFFFFF3E0),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          8.0),
-                                                ),
-                                                child: const Icon(
-                                                  Icons.code,
-                                                  color: Color(0xFFEF6C00),
-                                                  size: 24.0,
-                                                ),
-                                              ),
-                                              Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    'Coding Begins',
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyLarge
-                                                        .override(
-                                                          fontFamily:
-                                                              'Readex Pro',
-                                                          letterSpacing: 0.0,
-                                                        ),
-                                                  ),
-                                                  Text(
-                                                    'Today, 6:00 PM',
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodySmall
-                                                        .override(
-                                                          fontFamily:
-                                                              'Readex Pro',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .secondaryText,
-                                                          letterSpacing: 0.0,
-                                                        ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ].divide(const SizedBox(width: 16.0)),
-                                          ),
-                                          Icon(
-                                            Icons.chevron_right,
-                                            color: FlutterFlowTheme.of(context)
-                                                .secondaryText,
-                                            size: 24.0,
-                                          ),
-                                        ],
-                                      ),
-                                    ].divide(const SizedBox(height: 12.0)),
+                                        );
+                                      }
+                                      List<CalendarRecord>
+                                          columnCalendarRecordList =
+                                          snapshot.data!;
+
+                                      return Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: List.generate(
+                                            columnCalendarRecordList.length,
+                                            (columnIndex) {
+                                          final columnCalendarRecord =
+                                              columnCalendarRecordList[
+                                                  columnIndex];
+                                          return EventWidget(
+                                            key: Key(
+                                                'Key6lv_${columnIndex}_of_${columnCalendarRecordList.length}'),
+                                            name: columnCalendarRecord.name,
+                                            startTime:
+                                                columnCalendarRecord.startTime!,
+                                          );
+                                        }).divide(const SizedBox(height: 12.0)),
+                                      );
+                                    },
                                   ),
                                 ].divide(const SizedBox(height: 16.0)),
                               ),

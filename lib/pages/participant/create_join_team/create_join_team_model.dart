@@ -25,6 +25,10 @@ class CreateJoinTeamModel extends FlutterFlowModel<CreateJoinTeamWidget> {
   // Stores action output result for [Firestore Query - Query a collection] action in Button widget.
   TeamsRecord? teamRow;
   var scannedQrCode = '';
+  // Stores action output result for [Firestore Query - Query a collection] action in Icon widget.
+  int? queryResultQr;
+  // Stores action output result for [Firestore Query - Query a collection] action in Icon widget.
+  TeamsRecord? teamRowQR;
 
   @override
   void initState(BuildContext context) {}

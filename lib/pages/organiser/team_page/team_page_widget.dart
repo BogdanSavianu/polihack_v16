@@ -1,3 +1,4 @@
+import '/backend/backend.dart';
 import '/components/participant_card_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -9,12 +10,10 @@ export 'team_page_model.dart';
 class TeamPageWidget extends StatefulWidget {
   const TeamPageWidget({
     super.key,
-    required this.names,
-    required this.name,
+    required this.team,
   });
 
-  final List<String>? names;
-  final String? name;
+  final TeamsRecord? team;
 
   @override
   State<TeamPageWidget> createState() => _TeamPageWidgetState();
@@ -59,8 +58,8 @@ class _TeamPageWidgetState extends State<TeamPageWidget> {
                 color: FlutterFlowTheme.of(context).info,
                 size: 24.0,
               ),
-              onPressed: () {
-                print('IconButton pressed ...');
+              onPressed: () async {
+                context.safePop();
               },
             ),
             title: Text(
@@ -98,7 +97,7 @@ class _TeamPageWidgetState extends State<TeamPageWidget> {
                       children: [
                         Text(
                           valueOrDefault<String>(
-                            widget.name,
+                            widget.team?.name,
                             'n/a',
                           ),
                           style: FlutterFlowTheme.of(context)
@@ -110,16 +109,10 @@ class _TeamPageWidgetState extends State<TeamPageWidget> {
                               ),
                         ),
                         Text(
-                          'Web development',
-                          style:
-                              FlutterFlowTheme.of(context).bodyLarge.override(
-                                    fontFamily: 'Readex Pro',
-                                    color: Colors.white,
-                                    letterSpacing: 0.0,
-                                  ),
-                        ),
-                        Text(
-                          'Building scalable web applications with modern technologies',
+                          valueOrDefault<String>(
+                            widget.team?.description,
+                            'n/a',
+                          ),
                           style:
                               FlutterFlowTheme.of(context).bodyMedium.override(
                                     fontFamily: 'Readex Pro',
@@ -160,7 +153,8 @@ class _TeamPageWidgetState extends State<TeamPageWidget> {
                           ),
                           Builder(
                             builder: (context) {
-                              final names = widget.names!.toList();
+                              final names =
+                                  widget.team?.members.toList() ?? [];
 
                               return ListView.separated(
                                 padding: EdgeInsets.zero,
@@ -172,10 +166,36 @@ class _TeamPageWidgetState extends State<TeamPageWidget> {
                                     const SizedBox(height: 5.0),
                                 itemBuilder: (context, namesIndex) {
                                   final namesItem = names[namesIndex];
-                                  return ParticipantCardWidget(
-                                    key: Key(
-                                        'Keyklp_${namesIndex}_of_${names.length}'),
-                                    name: namesItem,
+                                  return StreamBuilder<UsersRecord>(
+                                    stream: UsersRecord.getDocument(namesItem),
+                                    builder: (context, snapshot) {
+                                      // Customize what your widget looks like when it's loading.
+                                      if (!snapshot.hasData) {
+                                        return Center(
+                                          child: SizedBox(
+                                            width: 50.0,
+                                            height: 50.0,
+                                            child: CircularProgressIndicator(
+                                              valueColor:
+                                                  AlwaysStoppedAnimation<Color>(
+                                                FlutterFlowTheme.of(context)
+                                                    .primary,
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      }
+
+                                      final participantCardUsersRecord =
+                                          snapshot.data!;
+
+                                      return ParticipantCardWidget(
+                                        key: Key(
+                                            'Keyklp_${namesIndex}_of_${names.length}'),
+                                        name: participantCardUsersRecord
+                                            .displayName,
+                                      );
+                                    },
                                   );
                                 },
                               );

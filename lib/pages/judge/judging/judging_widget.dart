@@ -1,4 +1,5 @@
 import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
 import '/components/recycler_team_judge_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -127,80 +128,65 @@ class _JudgingWidgetState extends State<JudgingWidget> {
                               child: Padding(
                                 padding: const EdgeInsetsDirectional.fromSTEB(
                                     16.0, 16.0, 16.0, 16.0),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    wrapWithModel(
-                                      model: _model.recyclerTeamJudgeModel1,
-                                      updateCallback: () => safeSetState(() {}),
-                                      child: const RecyclerTeamJudgeWidget(),
-                                    ),
-                                    Divider(
-                                      thickness: 2.0,
-                                      color: FlutterFlowTheme.of(context)
-                                          .alternate,
-                                    ),
-                                    wrapWithModel(
-                                      model: _model.recyclerTeamJudgeModel2,
-                                      updateCallback: () => safeSetState(() {}),
-                                      child: const RecyclerTeamJudgeWidget(),
-                                    ),
-                                    Divider(
-                                      thickness: 2.0,
-                                      color: FlutterFlowTheme.of(context)
-                                          .alternate,
-                                    ),
-                                    wrapWithModel(
-                                      model: _model.recyclerTeamJudgeModel3,
-                                      updateCallback: () => safeSetState(() {}),
-                                      child: const RecyclerTeamJudgeWidget(),
-                                    ),
-                                    Divider(
-                                      thickness: 2.0,
-                                      color: FlutterFlowTheme.of(context)
-                                          .alternate,
-                                    ),
-                                    wrapWithModel(
-                                      model: _model.recyclerTeamJudgeModel4,
-                                      updateCallback: () => safeSetState(() {}),
-                                      child: const RecyclerTeamJudgeWidget(),
-                                    ),
-                                    Divider(
-                                      thickness: 2.0,
-                                      color: FlutterFlowTheme.of(context)
-                                          .alternate,
-                                    ),
-                                    wrapWithModel(
-                                      model: _model.recyclerTeamJudgeModel5,
-                                      updateCallback: () => safeSetState(() {}),
-                                      child: const RecyclerTeamJudgeWidget(),
-                                    ),
-                                    Divider(
-                                      thickness: 2.0,
-                                      color: FlutterFlowTheme.of(context)
-                                          .alternate,
-                                    ),
-                                    wrapWithModel(
-                                      model: _model.recyclerTeamJudgeModel6,
-                                      updateCallback: () => safeSetState(() {}),
-                                      child: const RecyclerTeamJudgeWidget(),
-                                    ),
-                                    Divider(
-                                      thickness: 2.0,
-                                      color: FlutterFlowTheme.of(context)
-                                          .alternate,
-                                    ),
-                                    wrapWithModel(
-                                      model: _model.recyclerTeamJudgeModel7,
-                                      updateCallback: () => safeSetState(() {}),
-                                      child: const RecyclerTeamJudgeWidget(),
-                                    ),
-                                    Divider(
-                                      thickness: 2.0,
-                                      color: FlutterFlowTheme.of(context)
-                                          .alternate,
-                                    ),
-                                  ].divide(const SizedBox(height: 16.0)),
+                                child: StreamBuilder<List<TeamsRecord>>(
+                                  stream: queryTeamsRecord(),
+                                  builder: (context, snapshot) {
+                                    // Customize what your widget looks like when it's loading.
+                                    if (!snapshot.hasData) {
+                                      return Center(
+                                        child: SizedBox(
+                                          width: 50.0,
+                                          height: 50.0,
+                                          child: CircularProgressIndicator(
+                                            valueColor:
+                                                AlwaysStoppedAnimation<Color>(
+                                              FlutterFlowTheme.of(context)
+                                                  .primary,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                    List<TeamsRecord> columnTeamsRecordList =
+                                        snapshot.data!;
+
+                                    return Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: List.generate(
+                                          columnTeamsRecordList.length,
+                                          (columnIndex) {
+                                        final columnTeamsRecord =
+                                            columnTeamsRecordList[columnIndex];
+                                        return InkWell(
+                                          splashColor: Colors.transparent,
+                                          focusColor: Colors.transparent,
+                                          hoverColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          onTap: () async {
+                                            context.pushNamed(
+                                              'JudgeTeam',
+                                              queryParameters: {
+                                                'team': serializeParam(
+                                                  columnTeamsRecord,
+                                                  ParamType.Document,
+                                                ),
+                                              }.withoutNulls,
+                                              extra: <String, dynamic>{
+                                                'team': columnTeamsRecord,
+                                              },
+                                            );
+                                          },
+                                          child: RecyclerTeamJudgeWidget(
+                                            key: Key(
+                                                'Keyezo_${columnIndex}_of_${columnTeamsRecordList.length}'),
+                                            teamName: columnTeamsRecord.name,
+                                            teamDesc:
+                                                columnTeamsRecord.description,
+                                          ),
+                                        );
+                                      }).divide(const SizedBox(height: 16.0)),
+                                    );
+                                  },
                                 ),
                               ),
                             ),

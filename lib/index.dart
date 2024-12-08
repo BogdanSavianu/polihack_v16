@@ -18,15 +18,16 @@ export '/pages/judge/judging/judging_widget.dart' show JudgingWidget;
 export '/pages/organiser/participants/participants_widget.dart'
     show ParticipantsWidget;
 export '/pages/judge/judge_team/judge_team_widget.dart' show JudgeTeamWidget;
-export '/pages/signup/signup_widget.dart' show SignupWidget;
+export '/pages/participant/signup/signup_widget.dart' show SignupWidget;
 export '/pages/signin/signin_widget.dart' show SigninWidget;
 export '/pages/participant/page_home_participant/page_home_participant_widget.dart'
     show PageHomeParticipantWidget;
 export '/pages/participant/checkin/checkin_widget.dart' show CheckinWidget;
 export '/pages/participant/create_join_team/create_join_team_widget.dart'
     show CreateJoinTeamWidget;
-export '/scan_check_in/scan_check_in_widget.dart' show ScanCheckInWidget;
-export '/team_page/team_page_widget.dart' show TeamPageWidget;
+export '/pages/volunteers/scan_check_in/scan_check_in_widget.dart'
+    show ScanCheckInWidget;
+export '/pages/organiser/team_page/team_page_widget.dart' show TeamPageWidget;
 export '/pages/organiser/add_judging_criteria/add_judging_criteria_widget.dart'
     show AddJudgingCriteriaWidget;
 export '/pages/organiser/mentor_calendar_organier/mentor_calendar_organier_widget.dart'
@@ -43,3 +44,11 @@ export '/pages/judge/evaluation_sent/evaluation_sent_widget.dart'
     show EvaluationSentWidget;
 export '/pages/mentor/floor_plan_mentor/floor_plan_mentor_widget.dart'
     show FloorPlanMentorWidget;
+export '/pages/organiser/organizer_calendar/organizer_calendar_widget.dart'
+    show OrganizerCalendarWidget;
+export '/pages/participant/booked_mentors/booked_mentors_widget.dart'
+    show BookedMentorsWidget;
+export '/pages/participant/final_grades/final_grades_widget.dart'
+    show FinalGradesWidget;
+export '/pages/volunteers/home_volunteer/home_volunteer_widget.dart'
+    show HomeVolunteerWidget;

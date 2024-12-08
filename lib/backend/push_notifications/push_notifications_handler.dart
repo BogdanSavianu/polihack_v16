@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'serialization_util.dart';
+import '../backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '../../flutter_flow/flutter_flow_util.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -71,15 +72,11 @@ class _PushNotificationsHandlerState extends State<PushNotificationsHandler> {
 
   @override
   Widget build(BuildContext context) => _loading
-      ? Center(
-          child: SizedBox(
-            width: 50.0,
-            height: 50.0,
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(
-                FlutterFlowTheme.of(context).primary,
-              ),
-            ),
+      ? Container(
+          color: FlutterFlowTheme.of(context).primaryBackground,
+          child: Image.asset(
+            'assets/images/hackops-logo(1).png',
+            fit: BoxFit.contain,
           ),
         )
       : widget.child;
@@ -112,12 +109,22 @@ final parametersBuilderMap =
   'ContestantCalendar': ParameterData.none(),
   'FloorPlan': ParameterData.none(),
   'MentorsParticipants': ParameterData.none(),
-  'pageBookMentor': ParameterData.none(),
+  'pageBookMentor': (data) async => ParameterData(
+        allParams: {
+          'userRow': await getDocumentParameter<UsersRecord>(
+              data, 'userRow', UsersRecord.fromSnapshot),
+        },
+      ),
   'Volunteers': ParameterData.none(),
   'MentorCalendar': ParameterData.none(),
   'Judging': ParameterData.none(),
   'Participants': ParameterData.none(),
-  'JudgeTeam': ParameterData.none(),
+  'JudgeTeam': (data) async => ParameterData(
+        allParams: {
+          'team': await getDocumentParameter<TeamsRecord>(
+              data, 'team', TeamsRecord.fromSnapshot),
+        },
+      ),
   'Signup': ParameterData.none(),
   'Signin': ParameterData.none(),
   'pageHomeParticipant': ParameterData.none(),
@@ -126,17 +133,27 @@ final parametersBuilderMap =
   'ScanCheckIn': ParameterData.none(),
   'TeamPage': (data) async => ParameterData(
         allParams: {
-          'name': getParameter<String>(data, 'name'),
+          'team': await getDocumentParameter<TeamsRecord>(
+              data, 'team', TeamsRecord.fromSnapshot),
         },
       ),
   'AddJudgingCriteria': ParameterData.none(),
-  'MentorCalendarOrganier': ParameterData.none(),
+  'MentorCalendarOrganier': (data) async => ParameterData(
+        allParams: {
+          'mentor': await getDocumentParameter<UsersRecord>(
+              data, 'mentor', UsersRecord.fromSnapshot),
+        },
+      ),
   'billingDetails': ParameterData.none(),
   'AnnouncementsOrganizer': ParameterData.none(),
   'pageCreateAnnouncements': ParameterData.none(),
   'FeedbackPage': ParameterData.none(),
   'evaluationSent': ParameterData.none(),
   'FloorPlanMentor': ParameterData.none(),
+  'OrganizerCalendar': ParameterData.none(),
+  'bookedMentors': ParameterData.none(),
+  'finalGrades': ParameterData.none(),
+  'homeVolunteer': ParameterData.none(),
 };
 
 Map<String, dynamic> getInitialParameterData(Map<String, dynamic> data) {

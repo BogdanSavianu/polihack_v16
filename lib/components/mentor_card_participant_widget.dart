@@ -1,3 +1,4 @@
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -6,7 +7,12 @@ import 'mentor_card_participant_model.dart';
 export 'mentor_card_participant_model.dart';
 
 class MentorCardParticipantWidget extends StatefulWidget {
-  const MentorCardParticipantWidget({super.key});
+  const MentorCardParticipantWidget({
+    super.key,
+    required this.userRow,
+  });
+
+  final UsersRecord? userRow;
 
   @override
   State<MentorCardParticipantWidget> createState() =>
@@ -74,7 +80,10 @@ class _MentorCardParticipantWidgetState
                   child: Padding(
                     padding: const EdgeInsetsDirectional.fromSTEB(5.0, 5.0, 0.0, 0.0),
                     child: Text(
-                      'Samuel Sam',
+                      valueOrDefault<String>(
+                        widget.userRow?.displayName,
+                        'n/a',
+                      ),
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                             fontFamily: 'Readex Pro',
                             fontSize: 20.0,
@@ -92,7 +101,18 @@ class _MentorCardParticipantWidgetState
                   padding: const EdgeInsetsDirectional.fromSTEB(10.0, 5.0, 5.0, 0.0),
                   child: FFButtonWidget(
                     onPressed: () async {
-                      context.pushNamed('pageBookMentor');
+                      context.pushNamed(
+                        'pageBookMentor',
+                        queryParameters: {
+                          'userRow': serializeParam(
+                            widget.userRow,
+                            ParamType.Document,
+                          ),
+                        }.withoutNulls,
+                        extra: <String, dynamic>{
+                          'userRow': widget.userRow,
+                        },
+                      );
                     },
                     text: 'Book',
                     options: FFButtonOptions(

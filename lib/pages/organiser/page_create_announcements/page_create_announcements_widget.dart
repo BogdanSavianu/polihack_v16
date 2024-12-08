@@ -61,8 +61,8 @@ class _PageCreateAnnouncementsWidgetState
               color: FlutterFlowTheme.of(context).info,
               size: 24.0,
             ),
-            onPressed: () {
-              print('IconButton pressed ...');
+            onPressed: () async {
+              context.safePop();
             },
           ),
           title: Text(

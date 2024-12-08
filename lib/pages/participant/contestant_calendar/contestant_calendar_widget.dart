@@ -1,3 +1,4 @@
+import '/backend/backend.dart';
 import '/components/recycler_activity_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -56,9 +57,9 @@ class _ContestantCalendarWidgetState extends State<ContestantCalendarWidget> {
             automaticallyImplyLeading: false,
             leading: FlutterFlowIconButton(
               borderRadius: 8.0,
-              buttonSize: 40.0,
+              buttonSize: 90.0,
               icon: Icon(
-                Icons.list,
+                Icons.arrow_back,
                 color: FlutterFlowTheme.of(context).info,
                 size: 24.0,
               ),
@@ -84,99 +85,48 @@ class _ContestantCalendarWidgetState extends State<ContestantCalendarWidget> {
         body: Container(
           height: MediaQuery.sizeOf(context).height * 0.92,
           decoration: const BoxDecoration(),
-          child: ListView(
-            padding: EdgeInsets.zero,
-            scrollDirection: Axis.vertical,
-            children: [
-              Align(
-                alignment: const AlignmentDirectional(-0.8, 0.0),
-                child: Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
-                  child: Text(
-                    'Current activity',
-                    style: FlutterFlowTheme.of(context).bodyMedium.override(
-                          fontFamily: 'Readex Pro',
-                          fontSize: 17.0,
-                          letterSpacing: 0.0,
-                        ),
-                  ),
-                ),
-              ),
-              wrapWithModel(
-                model: _model.recyclerActivityModel1,
-                updateCallback: () => safeSetState(() {}),
-                child: const RecyclerActivityWidget(),
-              ),
-              Align(
-                alignment: const AlignmentDirectional(-0.8, 0.0),
-                child: Text(
-                  'Upcoming Activites',
-                  style: FlutterFlowTheme.of(context).bodyMedium.override(
-                        fontFamily: 'Readex Pro',
-                        fontSize: 17.0,
-                        letterSpacing: 0.0,
+          child: StreamBuilder<List<CalendarRecord>>(
+            stream: queryCalendarRecord(
+              queryBuilder: (calendarRecord) => calendarRecord
+                  .where(
+                    'start_time',
+                    isGreaterThan: getCurrentTimestamp,
+                  )
+                  .orderBy('start_time'),
+            ),
+            builder: (context, snapshot) {
+              // Customize what your widget looks like when it's loading.
+              if (!snapshot.hasData) {
+                return Center(
+                  child: SizedBox(
+                    width: 50.0,
+                    height: 50.0,
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        FlutterFlowTheme.of(context).primary,
                       ),
-                ),
-              ),
-              Align(
-                alignment: const AlignmentDirectional(-0.85, 0.0),
-                child: Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
-                  child: Text(
-                    'Today',
-                    style: FlutterFlowTheme.of(context).bodyMedium.override(
-                          fontFamily: 'Readex Pro',
-                          fontSize: 17.0,
-                          letterSpacing: 0.0,
-                        ),
+                    ),
                   ),
-                ),
-              ),
-              wrapWithModel(
-                model: _model.recyclerActivityModel2,
-                updateCallback: () => safeSetState(() {}),
-                child: const RecyclerActivityWidget(),
-              ),
-              wrapWithModel(
-                model: _model.recyclerActivityModel3,
-                updateCallback: () => safeSetState(() {}),
-                child: const RecyclerActivityWidget(),
-              ),
-              Align(
-                alignment: const AlignmentDirectional(-0.8, 0.0),
-                child: Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
-                  child: Text(
-                    'Tomorrow',
-                    style: FlutterFlowTheme.of(context).bodyMedium.override(
-                          fontFamily: 'Readex Pro',
-                          fontSize: 17.0,
-                          letterSpacing: 0.0,
-                        ),
-                  ),
-                ),
-              ),
-              wrapWithModel(
-                model: _model.recyclerActivityModel4,
-                updateCallback: () => safeSetState(() {}),
-                child: const RecyclerActivityWidget(),
-              ),
-              wrapWithModel(
-                model: _model.recyclerActivityModel5,
-                updateCallback: () => safeSetState(() {}),
-                child: const RecyclerActivityWidget(),
-              ),
-              wrapWithModel(
-                model: _model.recyclerActivityModel6,
-                updateCallback: () => safeSetState(() {}),
-                child: const RecyclerActivityWidget(),
-              ),
-              wrapWithModel(
-                model: _model.recyclerActivityModel7,
-                updateCallback: () => safeSetState(() {}),
-                child: const RecyclerActivityWidget(),
-              ),
-            ],
+                );
+              }
+              List<CalendarRecord> listViewCalendarRecordList = snapshot.data!;
+
+              return ListView.builder(
+                padding: EdgeInsets.zero,
+                scrollDirection: Axis.vertical,
+                itemCount: listViewCalendarRecordList.length,
+                itemBuilder: (context, listViewIndex) {
+                  final listViewCalendarRecord =
+                      listViewCalendarRecordList[listViewIndex];
+                  return RecyclerActivityWidget(
+                    key: Key(
+                        'Keyomk_${listViewIndex}_of_${listViewCalendarRecordList.length}'),
+                    name: listViewCalendarRecord.name,
+                    startTime: listViewCalendarRecord.startTime!,
+                  );
+                },
+              );
+            },
           ),
         ),
       ),

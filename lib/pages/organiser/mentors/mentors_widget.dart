@@ -88,8 +88,13 @@ class _MentorsWidgetState extends State<MentorsWidget> {
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
-              StreamBuilder<List<AnnouncementsRecord>>(
-                stream: queryAnnouncementsRecord(),
+              StreamBuilder<List<UsersRecord>>(
+                stream: queryUsersRecord(
+                  queryBuilder: (usersRecord) => usersRecord.where(
+                    'role',
+                    isEqualTo: 'mentor',
+                  ),
+                ),
                 builder: (context, snapshot) {
                   // Customize what your widget looks like when it's loading.
                   if (!snapshot.hasData) {
@@ -105,24 +110,44 @@ class _MentorsWidgetState extends State<MentorsWidget> {
                       ),
                     );
                   }
-                  List<AnnouncementsRecord> listViewAnnouncementsRecordList =
-                      snapshot.data!;
+                  List<UsersRecord> listViewUsersRecordList = snapshot.data!;
 
                   return ListView.separated(
                     padding: EdgeInsets.zero,
                     shrinkWrap: true,
                     scrollDirection: Axis.vertical,
-                    itemCount: listViewAnnouncementsRecordList.length,
+                    itemCount: listViewUsersRecordList.length,
                     separatorBuilder: (_, __) => const SizedBox(height: 5.0),
                     itemBuilder: (context, listViewIndex) {
-                      final listViewAnnouncementsRecord =
-                          listViewAnnouncementsRecordList[listViewIndex];
+                      final listViewUsersRecord =
+                          listViewUsersRecordList[listViewIndex];
                       return Padding(
                         padding:
                             const EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
-                        child: MentorCardWidget(
-                          key: Key(
-                              'Keyl7z_${listViewIndex}_of_${listViewAnnouncementsRecordList.length}'),
+                        child: InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () async {
+                            context.pushNamed(
+                              'MentorCalendarOrganier',
+                              queryParameters: {
+                                'mentor': serializeParam(
+                                  listViewUsersRecord,
+                                  ParamType.Document,
+                                ),
+                              }.withoutNulls,
+                              extra: <String, dynamic>{
+                                'mentor': listViewUsersRecord,
+                              },
+                            );
+                          },
+                          child: MentorCardWidget(
+                            key: Key(
+                                'Keyl7z_${listViewIndex}_of_${listViewUsersRecordList.length}'),
+                            mentorName: listViewUsersRecord.displayName,
+                          ),
                         ),
                       );
                     },

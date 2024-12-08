@@ -1,12 +1,18 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'recycler_team_judge_model.dart';
 export 'recycler_team_judge_model.dart';
 
 class RecyclerTeamJudgeWidget extends StatefulWidget {
-  const RecyclerTeamJudgeWidget({super.key});
+  const RecyclerTeamJudgeWidget({
+    super.key,
+    required this.teamName,
+    required this.teamDesc,
+  });
+
+  final String? teamName;
+  final String? teamDesc;
 
   @override
   State<RecyclerTeamJudgeWidget> createState() =>
@@ -37,53 +43,70 @@ class _RecyclerTeamJudgeWidgetState extends State<RecyclerTeamJudgeWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
+    return Container(
+      decoration: BoxDecoration(
+        color: FlutterFlowTheme.of(context).primaryBackground,
+        borderRadius: BorderRadius.circular(10.0),
+        border: Border.all(
+          color: FlutterFlowTheme.of(context).alternate,
+          width: 3.0,
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              'Team Alpha',
-              style: FlutterFlowTheme.of(context).bodyLarge.override(
-                    fontFamily: 'Readex Pro',
-                    letterSpacing: 0.0,
-                    fontWeight: FontWeight.w600,
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  valueOrDefault<String>(
+                    widget.teamName,
+                    'n/a',
                   ),
+                  style: FlutterFlowTheme.of(context).bodyLarge.override(
+                        fontFamily: 'Readex Pro',
+                        letterSpacing: 0.0,
+                        fontWeight: FontWeight.w600,
+                      ),
+                ),
+                Text(
+                  valueOrDefault<String>(
+                    widget.teamDesc,
+                    'n/a',
+                  ),
+                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                        fontFamily: 'Readex Pro',
+                        color: FlutterFlowTheme.of(context).secondaryText,
+                        letterSpacing: 0.0,
+                      ),
+                ),
+              ],
             ),
-            Text(
-              'Embedded • Table 1',
-              style: FlutterFlowTheme.of(context).bodyMedium.override(
-                    fontFamily: 'Readex Pro',
-                    color: FlutterFlowTheme.of(context).secondaryText,
-                    letterSpacing: 0.0,
-                  ),
+            Container(
+              width: MediaQuery.sizeOf(context).width * 0.2,
+              height: 50.0,
+              decoration: BoxDecoration(
+                color: FlutterFlowTheme.of(context).error,
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              child: Align(
+                alignment: const AlignmentDirectional(0.0, 0.0),
+                child: Text(
+                  'Mark',
+                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                        fontFamily: 'Readex Pro',
+                        letterSpacing: 0.0,
+                      ),
+                ),
+              ),
             ),
           ],
         ),
-        FFButtonWidget(
-          onPressed: () async {
-            context.pushNamed('JudgeTeam');
-          },
-          text: 'Mark',
-          options: FFButtonOptions(
-            width: 100.0,
-            height: 40.0,
-            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-            iconPadding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-            color: FlutterFlowTheme.of(context).error,
-            textStyle: FlutterFlowTheme.of(context).bodySmall.override(
-                  fontFamily: 'Readex Pro',
-                  color: FlutterFlowTheme.of(context).info,
-                  letterSpacing: 0.0,
-                ),
-            elevation: 0.0,
-            borderRadius: BorderRadius.circular(12.0),
-          ),
-        ),
-      ],
+      ),
     );
   }
 }

@@ -5,11 +5,17 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'judge_team_model.dart';
 export 'judge_team_model.dart';
 
 class JudgeTeamWidget extends StatefulWidget {
-  const JudgeTeamWidget({super.key});
+  const JudgeTeamWidget({
+    super.key,
+    required this.team,
+  });
+
+  final TeamsRecord? team;
 
   @override
   State<JudgeTeamWidget> createState() => _JudgeTeamWidgetState();
@@ -24,9 +30,6 @@ class _JudgeTeamWidgetState extends State<JudgeTeamWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => JudgeTeamModel());
-
-    _model.textController ??= TextEditingController();
-    _model.textFieldFocusNode ??= FocusNode();
   }
 
   @override
@@ -38,6 +41,8 @@ class _JudgeTeamWidgetState extends State<JudgeTeamWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
@@ -97,7 +102,10 @@ class _JudgeTeamWidgetState extends State<JudgeTeamWidget> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              'Team: Innovators',
+                              valueOrDefault<String>(
+                                widget.team?.name,
+                                'n/a',
+                              ),
                               style: FlutterFlowTheme.of(context)
                                   .headlineSmall
                                   .override(
@@ -106,7 +114,10 @@ class _JudgeTeamWidgetState extends State<JudgeTeamWidget> {
                                   ),
                             ),
                             Text(
-                              'Project: Smart City Solution',
+                              valueOrDefault<String>(
+                                widget.team?.description,
+                                'n/a',
+                              ),
                               style: FlutterFlowTheme.of(context)
                                   .bodyLarge
                                   .override(
@@ -120,96 +131,6 @@ class _JudgeTeamWidgetState extends State<JudgeTeamWidget> {
                         ),
                       ),
                     ),
-                  ),
-                  StreamBuilder<List<JudgingRecord>>(
-                    stream: queryJudgingRecord(
-                      queryBuilder: (judgingRecord) => judgingRecord.where(
-                        'hackathon_id',
-                        isEqualTo: 'polihack',
-                      ),
-                      limit: 1,
-                    ),
-                    builder: (context, snapshot) {
-                      // Customize what your widget looks like when it's loading.
-                      if (!snapshot.hasData) {
-                        return Center(
-                          child: SizedBox(
-                            width: 50.0,
-                            height: 50.0,
-                            child: CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                FlutterFlowTheme.of(context).primary,
-                              ),
-                            ),
-                          ),
-                        );
-                      }
-                      List<JudgingRecord> containerJudgingRecordList =
-                          snapshot.data!;
-
-                      return Material(
-                        color: Colors.transparent,
-                        elevation: 2.0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16.0),
-                        ),
-                        child: Container(
-                          width: MediaQuery.sizeOf(context).width * 1.0,
-                          decoration: BoxDecoration(
-                            color: FlutterFlowTheme.of(context)
-                                .secondaryBackground,
-                            borderRadius: BorderRadius.circular(16.0),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                24.0, 24.0, 24.0, 24.0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  'Evaluation Categories',
-                                  style: FlutterFlowTheme.of(context)
-                                      .headlineSmall
-                                      .override(
-                                        fontFamily: 'Outfit',
-                                        letterSpacing: 0.0,
-                                      ),
-                                ),
-                                Builder(
-                                  builder: (context) {
-                                    final containerVar =
-                                        containerJudgingRecordList
-                                            .first.judgeForm
-                                            .toList();
-
-                                    return ListView.builder(
-                                      padding: EdgeInsets.zero,
-                                      primary: false,
-                                      shrinkWrap: true,
-                                      scrollDirection: Axis.vertical,
-                                      itemCount: containerVar.length,
-                                      itemBuilder:
-                                          (context, containerVarIndex) {
-                                        final containerVarItem =
-                                            containerVar[containerVarIndex];
-                                        return RecyclerCriteriaWidget(
-                                          key: Key(
-                                              'Keym5y_${containerVarIndex}_of_${containerVar.length}'),
-                                          title: containerVarItem.title,
-                                          description:
-                                              containerVarItem.description,
-                                          weight: containerVarItem.weight,
-                                        );
-                                      },
-                                    );
-                                  },
-                                ),
-                              ].divide(const SizedBox(height: 20.0)),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
                   ),
                   Material(
                     color: Colors.transparent,
@@ -230,7 +151,7 @@ class _JudgeTeamWidgetState extends State<JudgeTeamWidget> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              'Additional Feedback',
+                              'Select Category',
                               style: FlutterFlowTheme.of(context)
                                   .headlineSmall
                                   .override(
@@ -238,60 +159,148 @@ class _JudgeTeamWidgetState extends State<JudgeTeamWidget> {
                                     letterSpacing: 0.0,
                                   ),
                             ),
-                            TextFormField(
-                              controller: _model.textController,
-                              focusNode: _model.textFieldFocusNode,
-                              autofocus: false,
-                              obscureText: false,
-                              decoration: InputDecoration(
-                                hintText:
-                                    'Enter your detailed feedback here...',
-                                hintStyle: FlutterFlowTheme.of(context)
-                                    .bodyLarge
-                                    .override(
-                                      fontFamily: 'Readex Pro',
-                                      letterSpacing: 0.0,
+                            StreamBuilder<List<JudgingRecord>>(
+                              stream: queryJudgingRecord(),
+                              builder: (context, snapshot) {
+                                // Customize what your widget looks like when it's loading.
+                                if (!snapshot.hasData) {
+                                  return Center(
+                                    child: SizedBox(
+                                      width: 50.0,
+                                      height: 50.0,
+                                      child: CircularProgressIndicator(
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                          FlutterFlowTheme.of(context).primary,
+                                        ),
+                                      ),
                                     ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                    color: Color(0xFFE0E0E0),
-                                    width: 1.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                    color: Color(0x00000000),
-                                    width: 1.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
-                                errorBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                    color: Color(0x00000000),
-                                    width: 1.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
-                                focusedErrorBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                    color: Color(0x00000000),
-                                    width: 1.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
-                              ),
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyLarge
-                                  .override(
-                                    fontFamily: 'Readex Pro',
-                                    letterSpacing: 0.0,
-                                  ),
-                              maxLines: 4,
-                              validator: _model.textControllerValidator
-                                  .asValidator(context),
+                                  );
+                                }
+                                List<JudgingRecord> wrapJudgingRecordList =
+                                    snapshot.data!;
+
+                                return Wrap(
+                                  spacing: 4.0,
+                                  runSpacing: 5.0,
+                                  alignment: WrapAlignment.center,
+                                  crossAxisAlignment: WrapCrossAlignment.start,
+                                  direction: Axis.horizontal,
+                                  runAlignment: WrapAlignment.start,
+                                  verticalDirection: VerticalDirection.down,
+                                  clipBehavior: Clip.none,
+                                  children: List.generate(
+                                      wrapJudgingRecordList.length,
+                                      (wrapIndex) {
+                                    final wrapJudgingRecord =
+                                        wrapJudgingRecordList[wrapIndex];
+                                    return FFButtonWidget(
+                                      onPressed: () async {
+                                        FFAppState().evaluationCategories =
+                                            wrapJudgingRecord.judgeForm
+                                                .toList()
+                                                .cast<CriterionStruct>();
+                                        FFAppState().category =
+                                            wrapJudgingRecord.category;
+                                        safeSetState(() {});
+                                      },
+                                      text: wrapJudgingRecord.category,
+                                      options: FFButtonOptions(
+                                        height: 40.0,
+                                        padding: const EdgeInsetsDirectional.fromSTEB(
+                                            16.0, 0.0, 16.0, 0.0),
+                                        iconPadding:
+                                            const EdgeInsetsDirectional.fromSTEB(
+                                                0.0, 0.0, 0.0, 0.0),
+                                        color: FlutterFlowTheme.of(context)
+                                            .primary,
+                                        textStyle: FlutterFlowTheme.of(context)
+                                            .titleSmall
+                                            .override(
+                                              fontFamily: 'Readex Pro',
+                                              color: Colors.white,
+                                              letterSpacing: 0.0,
+                                            ),
+                                        elevation: 0.0,
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                      ),
+                                    );
+                                  }),
+                                );
+                              },
                             ),
                           ].divide(const SizedBox(height: 16.0)),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Material(
+                    color: Colors.transparent,
+                    elevation: 2.0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16.0),
+                    ),
+                    child: Container(
+                      width: MediaQuery.sizeOf(context).width * 1.0,
+                      decoration: BoxDecoration(
+                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                        borderRadius: BorderRadius.circular(16.0),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            24.0, 24.0, 24.0, 24.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              'Evaluation Criteria',
+                              style: FlutterFlowTheme.of(context)
+                                  .headlineSmall
+                                  .override(
+                                    fontFamily: 'Outfit',
+                                    letterSpacing: 0.0,
+                                  ),
+                            ),
+                            Form(
+                              key: _model.formKey,
+                              autovalidateMode: AutovalidateMode.disabled,
+                              child: Builder(
+                                builder: (context) {
+                                  final containerVar = FFAppState()
+                                      .evaluationCategories
+                                      .toList();
+
+                                  return ListView.separated(
+                                    padding: EdgeInsets.zero,
+                                    primary: false,
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.vertical,
+                                    itemCount: containerVar.length,
+                                    separatorBuilder: (_, __) =>
+                                        const SizedBox(height: 5.0),
+                                    itemBuilder: (context, containerVarIndex) {
+                                      final containerVarItem =
+                                          containerVar[containerVarIndex];
+                                      return SizedBox(
+                                        height: 200.0,
+                                        child: RecyclerCriteriaWidget(
+                                          key: Key(
+                                              'Key9vv_${containerVarIndex}_of_${containerVar.length}'),
+                                          title: containerVarItem.title,
+                                          description:
+                                              containerVarItem.description,
+                                          category: FFAppState().category,
+                                          teamId: widget.team!.reference,
+                                          weight: containerVarItem.weight,
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
+                          ].divide(const SizedBox(height: 20.0)),
                         ),
                       ),
                     ),

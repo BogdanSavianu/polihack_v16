@@ -1,16 +1,22 @@
-import '/flutter_flow/flutter_flow_choice_chips.dart';
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import '/flutter_flow/form_field_controller.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'page_book_mentor_model.dart';
 export 'page_book_mentor_model.dart';
 
 class PageBookMentorWidget extends StatefulWidget {
   /// view schedule of mentor and book hour
-  const PageBookMentorWidget({super.key});
+  const PageBookMentorWidget({
+    super.key,
+    required this.userRow,
+  });
+
+  final UsersRecord? userRow;
 
   @override
   State<PageBookMentorWidget> createState() => _PageBookMentorWidgetState();
@@ -131,7 +137,10 @@ class _PageBookMentorWidgetState extends State<PageBookMentorWidget> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Samuel',
+                                  valueOrDefault<String>(
+                                    widget.userRow?.displayName,
+                                    'n/a',
+                                  ),
                                   style: FlutterFlowTheme.of(context)
                                       .headlineSmall
                                       .override(
@@ -168,207 +177,139 @@ class _PageBookMentorWidgetState extends State<PageBookMentorWidget> {
                     ),
                   ),
                 ),
-                Material(
-                  color: Colors.transparent,
-                  elevation: 2.0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16.0),
-                  ),
-                  child: Container(
-                    width: MediaQuery.sizeOf(context).width * 1.0,
-                    decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
-                      borderRadius: BorderRadius.circular(16.0),
+                StreamBuilder<List<MentorScheduleRecord>>(
+                  stream: queryMentorScheduleRecord(
+                    queryBuilder: (mentorScheduleRecord) =>
+                        mentorScheduleRecord.where(
+                      'mentor',
+                      isEqualTo: widget.userRow?.reference,
                     ),
-                    child: Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(
-                          24.0, 24.0, 24.0, 24.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            'Available Time Slots',
-                            style: FlutterFlowTheme.of(context)
-                                .headlineSmall
-                                .override(
-                                  fontFamily: 'Outfit',
-                                  letterSpacing: 0.0,
-                                ),
-                          ),
-                          Container(
-                            width: MediaQuery.sizeOf(context).width * 1.0,
-                            decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context)
-                                  .primaryBackground,
-                              borderRadius: BorderRadius.circular(12.0),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(
-                                  16.0, 16.0, 16.0, 16.0),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    'Today, March 15',
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyLarge
-                                        .override(
-                                          fontFamily: 'Readex Pro',
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                  ),
-                                  FlutterFlowChoiceChips(
-                                    options: const [
-                                      ChipData('10:00 AM'),
-                                      ChipData('10:30 AM'),
-                                      ChipData('11:00 AM'),
-                                      ChipData('11:30 AM'),
-                                      ChipData('12:00 AM')
-                                    ],
-                                    onChanged: (val) => safeSetState(() =>
-                                        _model.choiceChipsValue1 =
-                                            val?.firstOrNull),
-                                    selectedChipStyle: ChipStyle(
-                                      backgroundColor: const Color(0xFF8D0003),
-                                      textStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            fontFamily: 'Readex Pro',
-                                            color: FlutterFlowTheme.of(context)
-                                                .info,
-                                            fontSize: 20.0,
-                                            letterSpacing: 0.0,
-                                          ),
-                                      iconColor:
-                                          FlutterFlowTheme.of(context).info,
-                                      iconSize: 16.0,
-                                      elevation: 0.0,
-                                      borderRadius: BorderRadius.circular(8.0),
-                                    ),
-                                    unselectedChipStyle: ChipStyle(
-                                      backgroundColor:
-                                          FlutterFlowTheme.of(context)
-                                              .secondaryBackground,
-                                      textStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            fontFamily: 'Readex Pro',
-                                            color: FlutterFlowTheme.of(context)
-                                                .secondaryText,
-                                            fontSize: 20.0,
-                                            letterSpacing: 0.0,
-                                          ),
-                                      iconColor: FlutterFlowTheme.of(context)
-                                          .secondaryText,
-                                      iconSize: 20.0,
-                                      elevation: 0.0,
-                                      borderRadius: BorderRadius.circular(8.0),
-                                    ),
-                                    chipSpacing: 8.0,
-                                    rowSpacing: 8.0,
-                                    multiselect: false,
-                                    alignment: WrapAlignment.center,
-                                    controller:
-                                        _model.choiceChipsValueController1 ??=
-                                            FormFieldController<List<String>>(
-                                      [],
-                                    ),
-                                    wrapped: true,
-                                  ),
-                                ].divide(const SizedBox(height: 12.0)),
-                              ),
+                  ),
+                  builder: (context, snapshot) {
+                    // Customize what your widget looks like when it's loading.
+                    if (!snapshot.hasData) {
+                      return Center(
+                        child: SizedBox(
+                          width: 50.0,
+                          height: 50.0,
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              FlutterFlowTheme.of(context).primary,
                             ),
                           ),
-                          Container(
-                            width: MediaQuery.sizeOf(context).width * 1.0,
-                            decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context)
-                                  .primaryBackground,
-                              borderRadius: BorderRadius.circular(12.0),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(
-                                  16.0, 16.0, 16.0, 16.0),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    'Tomorrow, March 16',
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyLarge
-                                        .override(
-                                          fontFamily: 'Readex Pro',
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                  ),
-                                  FlutterFlowChoiceChips(
-                                    options: const [
-                                      ChipData('10:00 AM'),
-                                      ChipData('10:30 AM'),
-                                      ChipData('11:00 AM'),
-                                      ChipData('11:30 AM'),
-                                      ChipData('12:00 AM')
-                                    ],
-                                    onChanged: (val) => safeSetState(() =>
-                                        _model.choiceChipsValue2 =
-                                            val?.firstOrNull),
-                                    selectedChipStyle: ChipStyle(
-                                      backgroundColor: const Color(0xFF8D0003),
-                                      textStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            fontFamily: 'Readex Pro',
-                                            color: FlutterFlowTheme.of(context)
-                                                .info,
-                                            fontSize: 20.0,
-                                            letterSpacing: 0.0,
-                                          ),
-                                      iconColor:
-                                          FlutterFlowTheme.of(context).info,
-                                      iconSize: 16.0,
-                                      elevation: 0.0,
-                                      borderRadius: BorderRadius.circular(8.0),
-                                    ),
-                                    unselectedChipStyle: ChipStyle(
-                                      backgroundColor:
-                                          FlutterFlowTheme.of(context)
-                                              .secondaryBackground,
-                                      textStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            fontFamily: 'Readex Pro',
-                                            color: FlutterFlowTheme.of(context)
-                                                .secondaryText,
-                                            fontSize: 20.0,
-                                            letterSpacing: 0.0,
-                                          ),
-                                      iconColor: FlutterFlowTheme.of(context)
-                                          .secondaryText,
-                                      iconSize: 16.0,
-                                      elevation: 0.0,
-                                      borderRadius: BorderRadius.circular(8.0),
-                                    ),
-                                    chipSpacing: 8.0,
-                                    rowSpacing: 8.0,
-                                    multiselect: false,
-                                    alignment: WrapAlignment.center,
-                                    controller:
-                                        _model.choiceChipsValueController2 ??=
-                                            FormFieldController<List<String>>(
-                                      [],
-                                    ),
-                                    wrapped: true,
-                                  ),
-                                ].divide(const SizedBox(height: 12.0)),
-                              ),
-                            ),
-                          ),
-                        ].divide(const SizedBox(height: 16.0)),
+                        ),
+                      );
+                    }
+                    List<MentorScheduleRecord>
+                        containerMentorScheduleRecordList = snapshot.data!;
+
+                    return Material(
+                      color: Colors.transparent,
+                      elevation: 2.0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16.0),
                       ),
-                    ),
-                  ),
+                      child: Container(
+                        width: MediaQuery.sizeOf(context).width * 1.0,
+                        decoration: BoxDecoration(
+                          color:
+                              FlutterFlowTheme.of(context).secondaryBackground,
+                          borderRadius: BorderRadius.circular(16.0),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsetsDirectional.fromSTEB(
+                              24.0, 24.0, 24.0, 24.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                'Available Time Slots',
+                                style: FlutterFlowTheme.of(context)
+                                    .headlineSmall
+                                    .override(
+                                      fontFamily: 'Outfit',
+                                      letterSpacing: 0.0,
+                                    ),
+                              ),
+                              Container(
+                                width: MediaQuery.sizeOf(context).width * 1.0,
+                                decoration: BoxDecoration(
+                                  color: FlutterFlowTheme.of(context)
+                                      .primaryBackground,
+                                  borderRadius: BorderRadius.circular(12.0),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsetsDirectional.fromSTEB(
+                                      16.0, 16.0, 16.0, 16.0),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Builder(
+                                        builder: (context) {
+                                          final time = functions
+                                              .occupiedTime(
+                                                  getCurrentTimestamp,
+                                                  containerMentorScheduleRecordList
+                                                      .map((e) => e.startAt)
+                                                      .withoutNulls
+                                                      .toList())
+                                              .toList();
+
+                                          return Column(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: List.generate(time.length,
+                                                (timeIndex) {
+                                              final timeItem = time[timeIndex];
+                                              return FFButtonWidget(
+                                                onPressed: () async {
+                                                  _model.selectedTime =
+                                                      timeItem;
+                                                  safeSetState(() {});
+                                                },
+                                                text: dateTimeFormat(
+                                                    "M/d H:mm", timeItem),
+                                                options: FFButtonOptions(
+                                                  height: 40.0,
+                                                  padding: const EdgeInsetsDirectional
+                                                      .fromSTEB(
+                                                          16.0, 0.0, 16.0, 0.0),
+                                                  iconPadding:
+                                                      const EdgeInsetsDirectional
+                                                          .fromSTEB(0.0, 0.0,
+                                                              0.0, 0.0),
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .error,
+                                                  textStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .titleSmall
+                                                          .override(
+                                                            fontFamily:
+                                                                'Readex Pro',
+                                                            color: Colors.white,
+                                                            letterSpacing: 0.0,
+                                                          ),
+                                                  elevation: 0.0,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                ),
+                                              );
+                                            }).divide(const SizedBox(height: 5.0)),
+                                          );
+                                        },
+                                      ),
+                                    ].divide(const SizedBox(height: 12.0)),
+                                  ),
+                                ),
+                              ),
+                            ].divide(const SizedBox(height: 16.0)),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 ),
                 Material(
                   color: Colors.transparent,
@@ -517,6 +458,19 @@ class _PageBookMentorWidgetState extends State<PageBookMentorWidget> {
                             validator: _model.textController2Validator
                                 .asValidator(context),
                           ),
+                          if (_model.selectedTime != null)
+                            Text(
+                              valueOrDefault<String>(
+                                _model.selectedTime?.toString(),
+                                'n/a',
+                              ),
+                              style: FlutterFlowTheme.of(context)
+                                  .headlineSmall
+                                  .override(
+                                    fontFamily: 'Outfit',
+                                    letterSpacing: 0.0,
+                                  ),
+                            ),
                         ].divide(const SizedBox(height: 16.0)),
                       ),
                     ),
@@ -526,6 +480,13 @@ class _PageBookMentorWidgetState extends State<PageBookMentorWidget> {
                   padding: const EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 0.0),
                   child: FFButtonWidget(
                     onPressed: () async {
+                      await MentorScheduleRecord.collection
+                          .doc()
+                          .set(createMentorScheduleRecordData(
+                            mentor: widget.userRow?.reference,
+                            startAt: _model.selectedTime,
+                            team: currentUserDocument?.teamId,
+                          ));
                       context.safePop();
                     },
                     text: 'Book Session',

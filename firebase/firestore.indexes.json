@@ -1,5 +1,34 @@
 {
-  "indexes": [],
+  "indexes": [
+    {
+      "collectionGroup": "mentorSchedule",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "mentor",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "start_at",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "mentorSchedule",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "team",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "start_at",
+          "order": "ASCENDING"
+        }
+      ]
+    }
+  ],
   "fieldOverrides": [
     {
       "collectionGroup": "fcm_tokens",

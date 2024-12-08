@@ -23,8 +23,6 @@ class MenuModel extends FlutterFlowModel<MenuWidget> {
   bool mouseRegionHovered8 = false;
   // State field(s) for MouseRegion widget.
   bool mouseRegionHovered9 = false;
-  // State field(s) for MouseRegion widget.
-  bool mouseRegionHovered10 = false;
 
   @override
   void initState(BuildContext context) {}

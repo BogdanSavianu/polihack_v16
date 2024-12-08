@@ -60,8 +60,8 @@ class _BillingDetailsWidgetState extends State<BillingDetailsWidget> {
               color: FlutterFlowTheme.of(context).info,
               size: 24.0,
             ),
-            onPressed: () {
-              print('IconButton pressed ...');
+            onPressed: () async {
+              context.safePop();
             },
           ),
           title: Text(

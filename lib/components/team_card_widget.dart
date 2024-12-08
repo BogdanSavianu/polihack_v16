@@ -1,3 +1,4 @@
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
@@ -7,12 +8,10 @@ export 'team_card_model.dart';
 class TeamCardWidget extends StatefulWidget {
   const TeamCardWidget({
     super.key,
-    required this.teamName,
-    required this.peopleName,
+    required this.members,
   });
 
-  final String? teamName;
-  final List<String>? peopleName;
+  final TeamsRecord? members;
 
   @override
   State<TeamCardWidget> createState() => _TeamCardWidgetState();
@@ -53,16 +52,14 @@ class _TeamCardWidgetState extends State<TeamCardWidget> {
           context.pushNamed(
             'TeamPage',
             queryParameters: {
-              'names': serializeParam(
-                widget.peopleName,
-                ParamType.String,
-                isList: true,
-              ),
-              'name': serializeParam(
-                widget.teamName,
-                ParamType.String,
+              'team': serializeParam(
+                widget.members,
+                ParamType.Document,
               ),
             }.withoutNulls,
+            extra: <String, dynamic>{
+              'team': widget.members,
+            },
           );
         },
         child: Container(
@@ -90,7 +87,7 @@ class _TeamCardWidgetState extends State<TeamCardWidget> {
                       children: [
                         Text(
                           valueOrDefault<String>(
-                            widget.teamName,
+                            widget.members?.name,
                             'n/a',
                           ),
                           style: FlutterFlowTheme.of(context)
@@ -101,7 +98,10 @@ class _TeamCardWidgetState extends State<TeamCardWidget> {
                               ),
                         ),
                         Text(
-                          'Web development',
+                          valueOrDefault<String>(
+                            widget.members?.description,
+                            'n/a',
+                          ),
                           style: FlutterFlowTheme.of(context)
                               .bodyMedium
                               .override(

@@ -5,7 +5,14 @@ import 'recycler_activity_model.dart';
 export 'recycler_activity_model.dart';
 
 class RecyclerActivityWidget extends StatefulWidget {
-  const RecyclerActivityWidget({super.key});
+  const RecyclerActivityWidget({
+    super.key,
+    String? name,
+    required this.startTime,
+  }) : name = name ?? 'n/a';
+
+  final String name;
+  final DateTime? startTime;
 
   @override
   State<RecyclerActivityWidget> createState() => _RecyclerActivityWidgetState();
@@ -75,7 +82,7 @@ class _RecyclerActivityWidgetState extends State<RecyclerActivityWidget> {
                       padding:
                           const EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 0.0, 0.0),
                       child: Text(
-                        'Coding',
+                        widget.name,
                         style: FlutterFlowTheme.of(context).bodyLarge.override(
                               fontFamily: 'Plus Jakarta Sans',
                               color: FlutterFlowTheme.of(context).primaryText,
@@ -90,7 +97,10 @@ class _RecyclerActivityWidgetState extends State<RecyclerActivityWidget> {
                     padding:
                         const EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 8.0, 0.0),
                     child: Text(
-                      '17:00-19:00',
+                      valueOrDefault<String>(
+                        dateTimeFormat("M/d H:mm", widget.startTime),
+                        'n/a',
+                      ),
                       style: FlutterFlowTheme.of(context).labelMedium.override(
                             fontFamily: 'Plus Jakarta Sans',
                             color: FlutterFlowTheme.of(context).secondaryText,

@@ -1,3 +1,4 @@
+import '/flutter_flow/flutter_flow_expanded_image_view.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -92,13 +93,40 @@ class _FloorPlanWidgetState extends State<FloorPlanWidget> {
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(8.0),
-                  child: Image.asset(
-                    'assets/images/8b59c53818d07a90ec09294dfa490996.jpg',
-                    width: MediaQuery.sizeOf(context).width * 1.0,
-                    height: MediaQuery.sizeOf(context).height * 0.7,
-                    fit: BoxFit.contain,
+                InkWell(
+                  splashColor: Colors.transparent,
+                  focusColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  onTap: () async {
+                    await Navigator.push(
+                      context,
+                      PageTransition(
+                        type: PageTransitionType.fade,
+                        child: FlutterFlowExpandedImageView(
+                          image: Image.asset(
+                            'assets/images/8b59c53818d07a90ec09294dfa490996.jpg',
+                            fit: BoxFit.contain,
+                          ),
+                          allowRotation: false,
+                          tag: 'imageTag',
+                          useHeroAnimation: true,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Hero(
+                    tag: 'imageTag',
+                    transitionOnUserGestures: true,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: Image.asset(
+                        'assets/images/8b59c53818d07a90ec09294dfa490996.jpg',
+                        width: MediaQuery.sizeOf(context).width * 1.0,
+                        height: MediaQuery.sizeOf(context).height * 0.7,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
                   ),
                 ),
               ].divide(const SizedBox(height: 5.0)),

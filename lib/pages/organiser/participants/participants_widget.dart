@@ -1,9 +1,9 @@
+import '/backend/backend.dart';
 import '/components/team_card_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/pages/menu/menu_widget.dart';
-import '/flutter_flow/random_data_util.dart' as random_data;
 import 'package:flutter/material.dart';
 import 'participants_model.dart';
 export 'participants_model.dart';
@@ -89,35 +89,47 @@ class _ParticipantsWidgetState extends State<ParticipantsWidget> {
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
-              ListView(
-                padding: const EdgeInsets.fromLTRB(
-                  0,
-                  10.0,
-                  0,
-                  10.0,
-                ),
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
-                children: [
-                  wrapWithModel(
-                    model: _model.teamCardModel1,
-                    updateCallback: () => safeSetState(() {}),
-                    child: TeamCardWidget(
-                      teamName: 'Team Alpha',
-                      peopleName: List.generate(random_data.randomInteger(1, 4),
-                          (index) => random_data.randomName(true, false)),
+              StreamBuilder<List<TeamsRecord>>(
+                stream: queryTeamsRecord(),
+                builder: (context, snapshot) {
+                  // Customize what your widget looks like when it's loading.
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: SizedBox(
+                        width: 50.0,
+                        height: 50.0,
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            FlutterFlowTheme.of(context).primary,
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                  List<TeamsRecord> listViewTeamsRecordList = snapshot.data!;
+
+                  return ListView.separated(
+                    padding: const EdgeInsets.fromLTRB(
+                      0,
+                      10.0,
+                      0,
+                      10.0,
                     ),
-                  ),
-                  wrapWithModel(
-                    model: _model.teamCardModel2,
-                    updateCallback: () => safeSetState(() {}),
-                    child: TeamCardWidget(
-                      teamName: 'Team Beta',
-                      peopleName: List.generate(random_data.randomInteger(2, 4),
-                          (index) => random_data.randomName(true, false)),
-                    ),
-                  ),
-                ].divide(const SizedBox(height: 10.0)),
+                    shrinkWrap: true,
+                    scrollDirection: Axis.vertical,
+                    itemCount: listViewTeamsRecordList.length,
+                    separatorBuilder: (_, __) => const SizedBox(height: 10.0),
+                    itemBuilder: (context, listViewIndex) {
+                      final listViewTeamsRecord =
+                          listViewTeamsRecordList[listViewIndex];
+                      return TeamCardWidget(
+                        key: Key(
+                            'Keylea_${listViewIndex}_of_${listViewTeamsRecordList.length}'),
+                        members: listViewTeamsRecord,
+                      );
+                    },
+                  );
+                },
               ),
             ],
           ),

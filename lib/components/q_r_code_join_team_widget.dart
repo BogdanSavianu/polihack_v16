@@ -6,7 +6,12 @@ import 'q_r_code_join_team_model.dart';
 export 'q_r_code_join_team_model.dart';
 
 class QRCodeJoinTeamWidget extends StatefulWidget {
-  const QRCodeJoinTeamWidget({super.key});
+  const QRCodeJoinTeamWidget({
+    super.key,
+    required this.code,
+  });
+
+  final String? code;
 
   @override
   State<QRCodeJoinTeamWidget> createState() => _QRCodeJoinTeamWidgetState();
@@ -61,7 +66,7 @@ class _QRCodeJoinTeamWidgetState extends State<QRCodeJoinTeamWidget> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: BarcodeWidget(
-          data: 'https://flutterflow.io/',
+          data: widget.code!,
           barcode: Barcode.qrCode(),
           width: MediaQuery.sizeOf(context).width * 1.0,
           height: MediaQuery.sizeOf(context).height * 1.0,

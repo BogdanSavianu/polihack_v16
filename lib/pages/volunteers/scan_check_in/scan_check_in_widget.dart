@@ -1,6 +1,8 @@
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'scan_check_in_model.dart';
@@ -50,8 +52,8 @@ class _ScanCheckInWidgetState extends State<ScanCheckInWidget> {
               color: FlutterFlowTheme.of(context).info,
               size: 24.0,
             ),
-            onPressed: () {
-              print('IconButton pressed ...');
+            onPressed: () async {
+              context.safePop();
             },
           ),
           title: Text(
@@ -129,11 +131,25 @@ class _ScanCheckInWidgetState extends State<ScanCheckInWidget> {
                                         ScanMode.QR,
                                       );
 
+                                      _model.userDocument =
+                                          await queryUsersRecordOnce(
+                                        queryBuilder: (usersRecord) =>
+                                            usersRecord.where(
+                                          'uid',
+                                          isEqualTo: _model.scannedQrCode,
+                                        ),
+                                        singleRecord: true,
+                                      ).then((s) => s.firstOrNull);
+
+                                      await _model.userDocument!.reference
+                                          .update(createUsersRecordData(
+                                        checkIn: true,
+                                      ));
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
                                         SnackBar(
                                           content: Text(
-                                            '',
+                                            'Check in succesful!',
                                             style: TextStyle(
                                               color:
                                                   FlutterFlowTheme.of(context)
@@ -144,7 +160,7 @@ class _ScanCheckInWidgetState extends State<ScanCheckInWidget> {
                                               const Duration(milliseconds: 4000),
                                           backgroundColor:
                                               FlutterFlowTheme.of(context)
-                                                  .secondary,
+                                                  .alternate,
                                         ),
                                       );
 
@@ -181,99 +197,6 @@ class _ScanCheckInWidgetState extends State<ScanCheckInWidget> {
                                       .secondaryText,
                                   letterSpacing: 0.0,
                                 ),
-                          ),
-                        ].divide(const SizedBox(height: 16.0)),
-                      ),
-                    ),
-                  ),
-                ),
-                Material(
-                  color: Colors.transparent,
-                  elevation: 2.0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16.0),
-                  ),
-                  child: Container(
-                    width: MediaQuery.sizeOf(context).width * 1.0,
-                    decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
-                      borderRadius: BorderRadius.circular(16.0),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(
-                          20.0, 20.0, 20.0, 20.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            'Last Check In',
-                            style: FlutterFlowTheme.of(context)
-                                .headlineSmall
-                                .override(
-                                  fontFamily: 'Outfit',
-                                  letterSpacing: 0.0,
-                                ),
-                          ),
-                          Container(
-                            width: MediaQuery.sizeOf(context).width * 1.0,
-                            decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context)
-                                  .primaryBackground,
-                              borderRadius: BorderRadius.circular(12.0),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(
-                                  16.0, 16.0, 16.0, 16.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Workshop Area',
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyLarge
-                                            .override(
-                                              fontFamily: 'Readex Pro',
-                                              letterSpacing: 0.0,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                      ),
-                                      Text(
-                                        'Today, 2:30 PM',
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .override(
-                                              fontFamily: 'Readex Pro',
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              letterSpacing: 0.0,
-                                            ),
-                                      ),
-                                    ],
-                                  ),
-                                  Container(
-                                    width: 50.0,
-                                    height: 50.0,
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFE8F5E9),
-                                      borderRadius: BorderRadius.circular(25.0),
-                                    ),
-                                    child: const Icon(
-                                      Icons.check_circle,
-                                      color: Colors.green,
-                                      size: 30.0,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
                           ),
                         ].divide(const SizedBox(height: 16.0)),
                       ),

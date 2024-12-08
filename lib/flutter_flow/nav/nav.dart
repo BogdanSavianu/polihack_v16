@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '/backend/backend.dart';
-import '/backend/schema/structs/index.dart';
 
 import '/auth/base_auth_user_provider.dart';
 
@@ -119,7 +118,15 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: 'pageBookMentor',
           path: '/pageBookMentor',
-          builder: (context, params) => const PageBookMentorWidget(),
+          asyncParams: {
+            'userRow': getDoc(['users'], UsersRecord.fromSnapshot),
+          },
+          builder: (context, params) => PageBookMentorWidget(
+            userRow: params.getParam(
+              'userRow',
+              ParamType.Document,
+            ),
+          ),
         ),
         FFRoute(
           name: 'Volunteers',
@@ -144,7 +151,15 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: 'JudgeTeam',
           path: '/judgeTeam',
-          builder: (context, params) => const JudgeTeamWidget(),
+          asyncParams: {
+            'team': getDoc(['teams'], TeamsRecord.fromSnapshot),
+          },
+          builder: (context, params) => JudgeTeamWidget(
+            team: params.getParam(
+              'team',
+              ParamType.Document,
+            ),
+          ),
         ),
         FFRoute(
           name: 'Signup',
@@ -179,15 +194,13 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: 'TeamPage',
           path: '/teamPage',
+          asyncParams: {
+            'team': getDoc(['teams'], TeamsRecord.fromSnapshot),
+          },
           builder: (context, params) => TeamPageWidget(
-            names: params.getParam<String>(
-              'names',
-              ParamType.String,
-              isList: true,
-            ),
-            name: params.getParam(
-              'name',
-              ParamType.String,
+            team: params.getParam(
+              'team',
+              ParamType.Document,
             ),
           ),
         ),
@@ -199,7 +212,15 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: 'MentorCalendarOrganier',
           path: '/mentorCalendarOrganier',
-          builder: (context, params) => const MentorCalendarOrganierWidget(),
+          asyncParams: {
+            'mentor': getDoc(['users'], UsersRecord.fromSnapshot),
+          },
+          builder: (context, params) => MentorCalendarOrganierWidget(
+            mentor: params.getParam(
+              'mentor',
+              ParamType.Document,
+            ),
+          ),
         ),
         FFRoute(
           name: 'billingDetails',
@@ -230,6 +251,26 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: 'FloorPlanMentor',
           path: '/floorPlanMentor',
           builder: (context, params) => const FloorPlanMentorWidget(),
+        ),
+        FFRoute(
+          name: 'OrganizerCalendar',
+          path: '/organizerCalendar',
+          builder: (context, params) => const OrganizerCalendarWidget(),
+        ),
+        FFRoute(
+          name: 'bookedMentors',
+          path: '/bookedMentors',
+          builder: (context, params) => const BookedMentorsWidget(),
+        ),
+        FFRoute(
+          name: 'finalGrades',
+          path: '/finalGrades',
+          builder: (context, params) => const FinalGradesWidget(),
+        ),
+        FFRoute(
+          name: 'homeVolunteer',
+          path: '/homeVolunteer',
+          builder: (context, params) => const HomeVolunteerWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
@@ -416,15 +457,11 @@ class FFRoute {
                 )
               : builder(context, ffParams);
           final child = appStateNotifier.loading
-              ? Center(
-                  child: SizedBox(
-                    width: 50.0,
-                    height: 50.0,
-                    child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        FlutterFlowTheme.of(context).primary,
-                      ),
-                    ),
+              ? Container(
+                  color: FlutterFlowTheme.of(context).primaryBackground,
+                  child: Image.asset(
+                    'assets/images/hackops-logo(1).png',
+                    fit: BoxFit.contain,
                   ),
                 )
               : PushNotificationsHandler(child: page);

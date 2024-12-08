@@ -10,6 +10,9 @@ import 'schema/house_details_record.dart';
 import 'schema/announcements_record.dart';
 import 'schema/judging_record.dart';
 import 'schema/teams_record.dart';
+import 'schema/mentor_schedule_record.dart';
+import 'schema/calendar_record.dart';
+import 'schema/grades_record.dart';
 
 export 'dart:async' show StreamSubscription;
 export 'package:cloud_firestore/cloud_firestore.dart' hide Order;
@@ -23,6 +26,9 @@ export 'schema/house_details_record.dart';
 export 'schema/announcements_record.dart';
 export 'schema/judging_record.dart';
 export 'schema/teams_record.dart';
+export 'schema/mentor_schedule_record.dart';
+export 'schema/calendar_record.dart';
+export 'schema/grades_record.dart';
 
 /// Functions to query UsersRecords (as a Stream and as a Future).
 Future<int> queryUsersRecordCount({
@@ -204,6 +210,117 @@ Future<List<TeamsRecord>> queryTeamsRecordOnce({
     queryCollectionOnce(
       TeamsRecord.collection,
       TeamsRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+/// Functions to query MentorScheduleRecords (as a Stream and as a Future).
+Future<int> queryMentorScheduleRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      MentorScheduleRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
+Stream<List<MentorScheduleRecord>> queryMentorScheduleRecord({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      MentorScheduleRecord.collection,
+      MentorScheduleRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<MentorScheduleRecord>> queryMentorScheduleRecordOnce({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      MentorScheduleRecord.collection,
+      MentorScheduleRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+/// Functions to query CalendarRecords (as a Stream and as a Future).
+Future<int> queryCalendarRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      CalendarRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
+Stream<List<CalendarRecord>> queryCalendarRecord({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      CalendarRecord.collection,
+      CalendarRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<CalendarRecord>> queryCalendarRecordOnce({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      CalendarRecord.collection,
+      CalendarRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+/// Functions to query GradesRecords (as a Stream and as a Future).
+Future<int> queryGradesRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      GradesRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
+Stream<List<GradesRecord>> queryGradesRecord({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      GradesRecord.collection,
+      GradesRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<GradesRecord>> queryGradesRecordOnce({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      GradesRecord.collection,
+      GradesRecord.fromSnapshot,
       queryBuilder: queryBuilder,
       limit: limit,
       singleRecord: singleRecord,

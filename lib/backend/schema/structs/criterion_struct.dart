@@ -10,10 +10,12 @@ class CriterionStruct extends FFFirebaseStruct {
   CriterionStruct({
     String? title,
     String? description,
+    double? grade,
     double? weight,
     FirestoreUtilData firestoreUtilData = const FirestoreUtilData(),
   })  : _title = title,
         _description = description,
+        _grade = grade,
         _weight = weight,
         super(firestoreUtilData);
 
@@ -31,6 +33,15 @@ class CriterionStruct extends FFFirebaseStruct {
 
   bool hasDescription() => _description != null;
 
+  // "grade" field.
+  double? _grade;
+  double get grade => _grade ?? 0.0;
+  set grade(double? val) => _grade = val;
+
+  void incrementGrade(double amount) => grade = grade + amount;
+
+  bool hasGrade() => _grade != null;
+
   // "weight" field.
   double? _weight;
   double get weight => _weight ?? 0.0;
@@ -43,6 +54,7 @@ class CriterionStruct extends FFFirebaseStruct {
   static CriterionStruct fromMap(Map<String, dynamic> data) => CriterionStruct(
         title: data['title'] as String?,
         description: data['description'] as String?,
+        grade: castToType<double>(data['grade']),
         weight: castToType<double>(data['weight']),
       );
 
@@ -53,6 +65,7 @@ class CriterionStruct extends FFFirebaseStruct {
   Map<String, dynamic> toMap() => {
         'title': _title,
         'description': _description,
+        'grade': _grade,
         'weight': _weight,
       }.withoutNulls;
 
@@ -65,6 +78,10 @@ class CriterionStruct extends FFFirebaseStruct {
         'description': serializeParam(
           _description,
           ParamType.String,
+        ),
+        'grade': serializeParam(
+          _grade,
+          ParamType.double,
         ),
         'weight': serializeParam(
           _weight,
@@ -84,6 +101,11 @@ class CriterionStruct extends FFFirebaseStruct {
           ParamType.String,
           false,
         ),
+        grade: deserializeParam(
+          data['grade'],
+          ParamType.double,
+          false,
+        ),
         weight: deserializeParam(
           data['weight'],
           ParamType.double,
@@ -99,16 +121,19 @@ class CriterionStruct extends FFFirebaseStruct {
     return other is CriterionStruct &&
         title == other.title &&
         description == other.description &&
+        grade == other.grade &&
         weight == other.weight;
   }
 
   @override
-  int get hashCode => const ListEquality().hash([title, description, weight]);
+  int get hashCode =>
+      const ListEquality().hash([title, description, grade, weight]);
 }
 
 CriterionStruct createCriterionStruct({
   String? title,
   String? description,
+  double? grade,
   double? weight,
   Map<String, dynamic> fieldValues = const {},
   bool clearUnsetFields = true,
@@ -118,6 +143,7 @@ CriterionStruct createCriterionStruct({
     CriterionStruct(
       title: title,
       description: description,
+      grade: grade,
       weight: weight,
       firestoreUtilData: FirestoreUtilData(
         clearUnsetFields: clearUnsetFields,

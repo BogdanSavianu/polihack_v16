@@ -1,6 +1,7 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/random_data_util.dart' as random_data;
 import 'package:flutter/material.dart';
 import 'mentor_card_model.dart';
 export 'mentor_card_model.dart';
@@ -62,7 +63,10 @@ class _MentorCardWidgetState extends State<MentorCardWidget> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8.0),
                 child: Image.network(
-                  'https://picsum.photos/seed/419/600',
+                  random_data.randomImageUrl(
+                    0,
+                    0,
+                  ),
                   width: 100.0,
                   height: 200.0,
                   fit: BoxFit.cover,
@@ -105,8 +109,8 @@ class _MentorCardWidgetState extends State<MentorCardWidget> {
                 child: Padding(
                   padding: const EdgeInsetsDirectional.fromSTEB(10.0, 5.0, 5.0, 0.0),
                   child: FFButtonWidget(
-                    onPressed: () async {
-                      context.pushNamed('MentorCalendarOrganier');
+                    onPressed: () {
+                      print('Button pressed ...');
                     },
                     text: 'Check program',
                     options: FFButtonOptions(

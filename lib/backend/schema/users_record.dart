@@ -70,6 +70,11 @@ class UsersRecord extends FirestoreRecord {
   DocumentReference? get teamId => _teamId;
   bool hasTeamId() => _teamId != null;
 
+  // "check_in" field.
+  bool? _checkIn;
+  bool get checkIn => _checkIn ?? false;
+  bool hasCheckIn() => _checkIn != null;
+
   void _initializeFields() {
     _email = snapshotData['email'] as String?;
     _displayName = snapshotData['display_name'] as String?;
@@ -82,6 +87,7 @@ class UsersRecord extends FirestoreRecord {
     _role = snapshotData['role'] as String?;
     _title = snapshotData['title'] as String?;
     _teamId = snapshotData['teamId'] as DocumentReference?;
+    _checkIn = snapshotData['check_in'] as bool?;
   }
 
   static CollectionReference get collection =>
@@ -129,6 +135,7 @@ Map<String, dynamic> createUsersRecordData({
   String? role,
   String? title,
   DocumentReference? teamId,
+  bool? checkIn,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -143,6 +150,7 @@ Map<String, dynamic> createUsersRecordData({
       'role': role,
       'title': title,
       'teamId': teamId,
+      'check_in': checkIn,
     }.withoutNulls,
   );
 
@@ -164,7 +172,8 @@ class UsersRecordDocumentEquality implements Equality<UsersRecord> {
         e1?.lastActiveTime == e2?.lastActiveTime &&
         e1?.role == e2?.role &&
         e1?.title == e2?.title &&
-        e1?.teamId == e2?.teamId;
+        e1?.teamId == e2?.teamId &&
+        e1?.checkIn == e2?.checkIn;
   }
 
   @override
@@ -179,7 +188,8 @@ class UsersRecordDocumentEquality implements Equality<UsersRecord> {
         e?.lastActiveTime,
         e?.role,
         e?.title,
-        e?.teamId
+        e?.teamId,
+        e?.checkIn
       ]);
 
   @override

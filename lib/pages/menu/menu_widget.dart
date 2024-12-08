@@ -53,7 +53,7 @@ class _MenuWidgetState extends State<MenuWidget> {
         borderRadius: BorderRadius.circular(12.0),
       ),
       child: Padding(
-        padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 12.0),
+        padding: const EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 12.0),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,20 +93,23 @@ class _MenuWidgetState extends State<MenuWidget> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Randy Peterson',
-                          style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    fontFamily: 'Readex Pro',
-                                    letterSpacing: 0.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                        AuthUserStreamWidget(
+                          builder: (context) => Text(
+                            currentUserDisplayName,
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'Readex Pro',
+                                  letterSpacing: 0.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsetsDirectional.fromSTEB(
                               0.0, 4.0, 0.0, 0.0),
                           child: Text(
-                            'randy.p@domainname.com',
+                            currentUserEmail,
                             style:
                                 FlutterFlowTheme.of(context).bodySmall.override(
                                       fontFamily: 'Readex Pro',
@@ -124,6 +127,55 @@ class _MenuWidgetState extends State<MenuWidget> {
             Divider(
               thickness: 1.0,
               color: FlutterFlowTheme.of(context).alternate,
+            ),
+            InkWell(
+              splashColor: Colors.transparent,
+              focusColor: Colors.transparent,
+              hoverColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              onTap: () async {
+                context.pushNamed('HomePageOrganizer');
+              },
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 150),
+                curve: Curves.easeInOut,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: FlutterFlowTheme.of(context).secondaryBackground,
+                ),
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 8.0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Padding(
+                        padding:
+                            const EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 0.0, 0.0),
+                        child: Icon(
+                          Icons.home,
+                          color: FlutterFlowTheme.of(context).primaryText,
+                          size: 20.0,
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsetsDirectional.fromSTEB(
+                              12.0, 0.0, 0.0, 0.0),
+                          child: Text(
+                            'Home',
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'Readex Pro',
+                                  letterSpacing: 0.0,
+                                ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
             MouseRegion(
               opaque: false,
@@ -317,45 +369,54 @@ class _MenuWidgetState extends State<MenuWidget> {
               onExit: ((event) async {
                 safeSetState(() => _model.mouseRegionHovered4 = false);
               }),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 150),
-                curve: Curves.easeInOut,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: _model.mouseRegionHovered4
-                      ? FlutterFlowTheme.of(context).primaryBackground
-                      : FlutterFlowTheme.of(context).secondaryBackground,
-                ),
-                child: Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 8.0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Padding(
-                        padding:
-                            const EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 0.0, 0.0),
-                        child: Icon(
-                          Icons.people,
-                          color: FlutterFlowTheme.of(context).primaryText,
-                          size: 20.0,
-                        ),
-                      ),
-                      Expanded(
-                        child: Padding(
+              child: InkWell(
+                splashColor: Colors.transparent,
+                focusColor: Colors.transparent,
+                hoverColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onTap: () async {
+                  context.pushNamed('Participants');
+                },
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 150),
+                  curve: Curves.easeInOut,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: _model.mouseRegionHovered4
+                        ? FlutterFlowTheme.of(context).primaryBackground
+                        : FlutterFlowTheme.of(context).secondaryBackground,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 8.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Padding(
                           padding: const EdgeInsetsDirectional.fromSTEB(
                               12.0, 0.0, 0.0, 0.0),
-                          child: Text(
-                            'Participants',
-                            style: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .override(
-                                  fontFamily: 'Readex Pro',
-                                  letterSpacing: 0.0,
-                                ),
+                          child: Icon(
+                            Icons.people,
+                            color: FlutterFlowTheme.of(context).primaryText,
+                            size: 20.0,
                           ),
                         ),
-                      ),
-                    ],
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                12.0, 0.0, 0.0, 0.0),
+                            child: Text(
+                              'Participants',
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                    fontFamily: 'Readex Pro',
+                                    letterSpacing: 0.0,
+                                  ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -436,7 +497,7 @@ class _MenuWidgetState extends State<MenuWidget> {
                 hoverColor: Colors.transparent,
                 highlightColor: Colors.transparent,
                 onTap: () async {
-                  context.pushNamed('ContestantCalendar');
+                  context.pushNamed('OrganizerCalendar');
                 },
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 150),
@@ -484,64 +545,12 @@ class _MenuWidgetState extends State<MenuWidget> {
             ),
             MouseRegion(
               opaque: false,
-              cursor: SystemMouseCursors.basic ?? MouseCursor.defer,
+              cursor: SystemMouseCursors.click ?? MouseCursor.defer,
               onEnter: ((event) async {
                 safeSetState(() => _model.mouseRegionHovered7 = true);
               }),
               onExit: ((event) async {
                 safeSetState(() => _model.mouseRegionHovered7 = false);
-              }),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 150),
-                curve: Curves.easeInOut,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: _model.mouseRegionHovered7
-                      ? FlutterFlowTheme.of(context).primaryBackground
-                      : FlutterFlowTheme.of(context).secondaryBackground,
-                ),
-                child: Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 8.0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Padding(
-                        padding:
-                            const EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 0.0, 0.0),
-                        child: Icon(
-                          Icons.settings_outlined,
-                          color: FlutterFlowTheme.of(context).primaryText,
-                          size: 20.0,
-                        ),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(
-                              12.0, 0.0, 0.0, 0.0),
-                          child: Text(
-                            'Settings',
-                            style: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .override(
-                                  fontFamily: 'Readex Pro',
-                                  letterSpacing: 0.0,
-                                ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            MouseRegion(
-              opaque: false,
-              cursor: SystemMouseCursors.click ?? MouseCursor.defer,
-              onEnter: ((event) async {
-                safeSetState(() => _model.mouseRegionHovered8 = true);
-              }),
-              onExit: ((event) async {
-                safeSetState(() => _model.mouseRegionHovered8 = false);
               }),
               child: InkWell(
                 splashColor: Colors.transparent,
@@ -556,7 +565,7 @@ class _MenuWidgetState extends State<MenuWidget> {
                   curve: Curves.easeInOut,
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: _model.mouseRegionHovered8
+                    color: _model.mouseRegionHovered7
                         ? FlutterFlowTheme.of(context).primaryBackground
                         : FlutterFlowTheme.of(context).secondaryBackground,
                   ),
@@ -599,12 +608,12 @@ class _MenuWidgetState extends State<MenuWidget> {
               opaque: false,
               cursor: SystemMouseCursors.basic ?? MouseCursor.defer,
               onEnter: ((event) async {
-                safeSetState(() => _model.mouseRegionHovered9 = true);
+                safeSetState(() => _model.mouseRegionHovered8 = true);
 
                 context.pushNamed('AddJudgingCriteria');
               }),
               onExit: ((event) async {
-                safeSetState(() => _model.mouseRegionHovered9 = false);
+                safeSetState(() => _model.mouseRegionHovered8 = false);
               }),
               child: InkWell(
                 splashColor: Colors.transparent,
@@ -619,7 +628,7 @@ class _MenuWidgetState extends State<MenuWidget> {
                   curve: Curves.easeInOut,
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: _model.mouseRegionHovered9
+                    color: _model.mouseRegionHovered8
                         ? FlutterFlowTheme.of(context).primaryBackground
                         : FlutterFlowTheme.of(context).secondaryBackground,
                   ),
@@ -666,10 +675,10 @@ class _MenuWidgetState extends State<MenuWidget> {
               opaque: false,
               cursor: SystemMouseCursors.click ?? MouseCursor.defer,
               onEnter: ((event) async {
-                safeSetState(() => _model.mouseRegionHovered10 = true);
+                safeSetState(() => _model.mouseRegionHovered9 = true);
               }),
               onExit: ((event) async {
-                safeSetState(() => _model.mouseRegionHovered10 = false);
+                safeSetState(() => _model.mouseRegionHovered9 = false);
               }),
               child: InkWell(
                 splashColor: Colors.transparent,
@@ -688,7 +697,7 @@ class _MenuWidgetState extends State<MenuWidget> {
                   curve: Curves.easeInOut,
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: _model.mouseRegionHovered10
+                    color: _model.mouseRegionHovered9
                         ? FlutterFlowTheme.of(context).primaryBackground
                         : FlutterFlowTheme.of(context).secondaryBackground,
                   ),

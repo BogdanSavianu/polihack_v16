@@ -25,12 +25,18 @@ class JudgingRecord extends FirestoreRecord {
   String get hackathonId => _hackathonId ?? '';
   bool hasHackathonId() => _hackathonId != null;
 
+  // "category" field.
+  String? _category;
+  String get category => _category ?? '';
+  bool hasCategory() => _category != null;
+
   void _initializeFields() {
     _judgeForm = getStructList(
       snapshotData['judge_form'],
       CriterionStruct.fromMap,
     );
     _hackathonId = snapshotData['hackathon_id'] as String?;
+    _category = snapshotData['category'] as String?;
   }
 
   static CollectionReference get collection =>
@@ -69,10 +75,12 @@ class JudgingRecord extends FirestoreRecord {
 
 Map<String, dynamic> createJudgingRecordData({
   String? hackathonId,
+  String? category,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
       'hackathon_id': hackathonId,
+      'category': category,
     }.withoutNulls,
   );
 
@@ -86,12 +94,13 @@ class JudgingRecordDocumentEquality implements Equality<JudgingRecord> {
   bool equals(JudgingRecord? e1, JudgingRecord? e2) {
     const listEquality = ListEquality();
     return listEquality.equals(e1?.judgeForm, e2?.judgeForm) &&
-        e1?.hackathonId == e2?.hackathonId;
+        e1?.hackathonId == e2?.hackathonId &&
+        e1?.category == e2?.category;
   }
 
   @override
   int hash(JudgingRecord? e) =>
-      const ListEquality().hash([e?.judgeForm, e?.hackathonId]);
+      const ListEquality().hash([e?.judgeForm, e?.hackathonId, e?.category]);
 
   @override
   bool isValidKey(Object? o) => o is JudgingRecord;
